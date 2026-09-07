@@ -17,5 +17,12 @@ test.describe('Visual Regression Tests', () => {
         // Capture basaeline screenshot of the Inventory page
         await expect(page).toHaveScreenshot('inventory-page.png');
             maxDiffPixelRatio: 0.02
+
+        //Mask dynamic elements (like the shopping cart container or spesific item)
+            mask: [
+                page.locator('.shopping_cart_link'),
+                page.locator('.inventory_item_img').first()
+            ]
+
     });
 });
