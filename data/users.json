@@ -1,0 +1,20 @@
+[
+    {
+        "username": "standard_user",
+        "password": "secret_sauce",
+        "expectedUrl": "https://www.saucedemo.com/inventory.html",
+        "description": "Standard valid user"
+    },
+    {
+        "username": "locked_out_user",
+        "password": "secret_sauce",
+        "expectedUrl": "https://www.saucedemo.com/",
+        "description": "Locked out user"
+    },
+    {
+        "username": "problem_user",
+        "password": "secret_sauce",
+        "expectedUrl": "https://www.saucedemo.com/inventory.html",
+        "description": "Problem user"
+    }
+]

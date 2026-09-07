@@ -2,10 +2,11 @@ import { Page } from '@playwright/test';
 
 export class LoginPage {
 
-    private page: Page;
-    private usernameInput;
-    private passwordInput;
-    private loginButton;
+    readonly page: Page;
+    readonly usernameInput;
+    readonly passwordInput;
+    readonly loginButton;
+    readonly errorMessage;
 
     constructor(page: Page) {
         this.page = page;
@@ -13,6 +14,7 @@ export class LoginPage {
         this.usernameInput = this.page.getByPlaceholder('Username');
         this.passwordInput = this.page.getByPlaceholder('Password');
         this.loginButton = this.page.getByRole('button', { name: 'Login' });
+        this.errorMessage = page.locator('[data-test="error"]');
 
     }
 
