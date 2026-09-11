@@ -4,7 +4,7 @@ test.describe('API Testing with Playwright', () => {
 
     test('GET: Fetch list of users and validate response payload', async ({ request }) => {
         // Send a direct GET request
-        const response = await request.get('https://jsonplaceholder.typicode.com/users');
+        const response = await request.get('/users');
 
         // Asser HTTP status code and status ok
         expect(response.status()).toBe(200);
@@ -27,7 +27,7 @@ test.describe('API Testing with Playwright', () => {
         };
 
         // Send POST request with JSON payload
-        const response = await request.post('https://jsonplaceholder.typicode.com/posts', {
+        const response = await request.post('/posts', {
             data: payload,
         });
 
@@ -50,7 +50,7 @@ test.describe('API Testing with Playwright', () => {
         };
 
         // Send PUT request to update post #1
-        const response = await request.put('https://jsonplaceholder.typicode.com/posts/1', {
+        const response = await request.put('/posts/1', {
             data: updatePayload,
         });
 
@@ -65,7 +65,7 @@ test.describe('API Testing with Playwright', () => {
 
     test('DELETE: Remove a post and assert 200 OK', async ({ request }) => {
         // Send DELETE request for post #1
-        const response = await request.delete('https://jsonplaceholder.typicode.com/posts/1');
+        const response = await request.delete('/posts/1');
 
         // Assert Status Code 200 OK (or 204 No Content depending on API spec)
         expect(response.status()).toBe(200);
