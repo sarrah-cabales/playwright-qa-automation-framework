@@ -1,28 +1,61 @@
-import { test, expect } from '../fixtures/pageFixtures';
+import { test, expect } from '@playwright/test';
 
-test.describe('Visual Regression Tests', () => {
+test.describe('Day 34: Visual Regression Testing', () => {
 
-    test('Visual check: Login Page layout', async ({ page }) => {
-        await page.goto('https://www.saucedemo.com');
+    test('Verify full page layout againts baseline snapshot', async ({ page }) => {
+        // Navigate ti targer application
+        await page.goto('https://demo.playwright.dev/todomvc/#/');
 
-        // Capture baseline screenshots of the Login page
-        await expect(page).toHaveScreenshot('login-page.png');
-            maxDiffPixelRatio: 0.02
+        // Perform visual snapshot comparison on the whole page
+        await expect(page).toHaveScreenshot('todomvc-home-page.png', {
+            // Allow up to 100 pixels to differ (prevents OS fonr rendering flakiness)
+            maxDiffPixels: 100,
+        });
     });
 
-    test('Visual check: Inventory Page layout', async ({ page, loginPage }) => {
-        await page.goto('https://www.saucedemo.com');
-        await loginPage.login('standard_eser', 'secret_sauce');
+    test('Verify specific component layout (Header only', async ({ page }) => {
+        await page.goto('https://demo.playwright.dev/todomvc/#/');
 
-        // Capture basaeline screenshot of the Inventory page
-        await expect(page).toHaveScreenshot('inventory-page.png');
-            maxDiffPixelRatio: 0.02
+        // Target a specific element instead of the whole viewport
+        const header = page.locator('header.header');
 
-        //Mask dynamic elements (like the shopping cart container or spesific item)
-            mask: [
-                page.locator('.shopping_cart_link'),
-                page.locator('.inventory_item_img').first()
-            ]
+        // Take snapshot of ONLY the header element
+        await expect(header).toHaveScreenshot('todomvc-header-component.png');
 
     });
-});
+
+    test('Verify page layout while masking dynamic elements', async ({ page }) => {
+        await page.goto('https://demo.playwright.dev/todomvc/#/');
+
+        // Add a todo item dynamically so the UI changes
+        const newTodo = page.locator('.new-todo');
+        await newTodo.fill('Dynamic Tasl for Masking Test');
+        await newTodo.press('Enter');
+
+        // Locate the dynamic element (e.g, the todo counter or list item)
+        const todoItem = page.locator('.todo-list li');
+
+        // Take a snapshot while masking the dynamic item text
+        await expect(page).toHaveScreenshot('todomvc-masked-page.png', {
+            mask: [todoItem], // Playwirght covers this element with a magenta box
+        });
+    });
+
+    test('Detect deliberate visual bug using laypit modification', async ({ page }) => {
+        await page.goto('https://demo.playwright.dev/todomvc/#/');
+
+        // Inject a style change to simulate a UI bug (e.g, header font/color shifted)
+        await page.evaluate(() => {
+            const heading = document.querySelector('h1');
+            if (heading) {
+                heading.style.color = 'red';
+                heading.style.fontSize = '80px';
+            }
+        });
+
+        // Assert against out existing baseline - this SHOULD fail!
+        await expect(
+            expect(page).toHaveScreenshot('todomvc-home-page.png')
+        ).rejects.toThrow();
+        });
+    });
