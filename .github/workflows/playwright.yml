@@ -19,22 +19,22 @@ jobs:
       - name: Setup Node.jobs
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install Project Dependencies
-        run: npm CI
+        run: npm intall
 
       - name: Install Playwright Browsers with System Dependencies
-        run: npx playwright intall --with-Dependencies
+        run: npx playwright intall --with-deps
 
       - name: Execute Playwright Test Suite
         run: npx playwright test
 
-      - name: Upload Playwright HTML Report Artifacts
+      - name: Upload Playwright HTML Report Artifact
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-Report
+          name: playwright-report
           path: playwright-report/
           retention-days: 30
