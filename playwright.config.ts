@@ -27,7 +27,7 @@ export default defineConfig({
   /* Configure custom snapshot path template to share baseline across OS platforms */
   expect: {
     toHaveScreenshot: {
-      pathTemplate: '{testDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{ext}',
+      pathTemplate: '{testDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}-{projectName}{ext}',
     },
   },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

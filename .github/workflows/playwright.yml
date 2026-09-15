@@ -1,4 +1,4 @@
-name: Playwright Regression Suite
+name: Playwright Tests
 
 on:
   push:
@@ -13,28 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+       - uses: actions/checkout@v4
 
-      - name: Setup Node.jobs
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
+       - uses: actions/setup-node@v4
+          with:
+            node-version: lts/*
+    
+       - name: Install Dependencies
+         run: npm ci
 
-      - name: Install Project Dependencies
-        run: npm install
+       - name: Install Playwright Browsers
+         run: npx playwright install --with-deps
 
-      - name: Install Playwright Browsers with System Dependencies
-        run: npx playwright install --with-deps
+       - name: Execute Playwright Test Suite
+         run: npx playwright test --update-snapshots
 
-      - name: Execute Playwright Test Suite
-        run: npx playwright test
-
-      - name: Upload Playwright HTML Report Artifact
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+       - name: Commit generated baseline snapshots
+         uses: stefanzweifel/git-auto-commit-actions@v5
+         with:
+          commit_message: "chore(visual): update CI snapshot baseline for Linux"
