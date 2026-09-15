@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Project Dependencies
-        run: npm intall
+        run: npm install
 
       - name: Install Playwright Browsers with System Dependencies
         run: npx playwright intall --with-deps
