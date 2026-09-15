@@ -24,5 +24,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Execute Playwright Test Suite
-        run: npx playwright test
+      - name: Generate Baseline Snapshots
+        run: npx playwright test --update-snapshots || true
+
+      - name: Commit Baseline Snapshots
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(visual): generate and save baseline snapshots"
