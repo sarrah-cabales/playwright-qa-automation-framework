@@ -1,0 +1,40 @@
+name: Playwright Regression Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Run Playwright Test (CI)
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.jobs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm CI
+
+      - name: Install Playwright Browsers with System Dependencies
+        run: npx playwright intall --with-Dependencies
+
+      - name: Execute Playwright Test Suite
+        run: npx playwright test
+
+      - name: Upload Playwright HTML Report Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-Report
+          path: playwright-report/
+          retention-days: 30
