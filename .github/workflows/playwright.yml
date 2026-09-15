@@ -29,7 +29,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Execute Playwright Test Suite
-        run: npx playwright test --update-snapshots
+        run: npx playwright test
 
       - name: Upload Playwright HTML Report Artifact
         if: ${{ !cancelled() }}
