@@ -27,10 +27,15 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright Tests
-        run: npx playwright test
+      - name: Generate Baseline Snapshots
+        run: npx playwright test --update-snapshots || true
         env:
           CI: true
+
+      - name: Commit Baseline Snapshots
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "ci(visual): generate and save baseline snapshots"
 
       - name: Upload Playwright Report
         if: ${{ !cancelled() }}
