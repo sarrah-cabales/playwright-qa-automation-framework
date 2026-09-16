@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Day 33: Hybrid API + UI Testing', () => {
 
-    test('Bypass UI setup by pre-populationg browser storage', async ({ page }) => {
+    test('Bypass UI setup by pre-population browser storage', async ({ page }) => {
         // Simulate receiving initial state or auth session from an API payload
         const initialTodos = [
             { id: '1', title: 'Task 1 created via API/State Seeding', completed: false },
