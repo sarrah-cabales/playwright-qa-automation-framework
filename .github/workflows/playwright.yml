@@ -33,24 +33,15 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # Runs on normal pushes/PRs or when update_snapshots is explicitly false
       - name: Run Playwright Tests
-        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.update_snapshots }}
-        run: npx playwright test
-
-      # Runs ONLY when manually triggered with update_snapshots checked
-      - name: Update Snapshots
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
         run: npx playwright test --update-snapshots
 
-      # Commits updated baseline images back to the repository
       - name: Commit Baseline Snapshots
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
+        if: ${{ !cancelled() }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(visual): generate and save baseline snapshots"
 
-      # Upload HTML reports and diff artifacts on failure for easy debugging
       - name: Upload Playwright Report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
